@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Start Page</title>
+	<style type="text/css">
+		:root {/* Just change these settings to modify all colors and background image */
+		  --color-text:SteelBlue;
+		  --color-bg-base:Ivory;
+		  --color-bg-hover:Gainsboro;
+		  --bg-image:radial-gradient(closest-side, Ivory 0%, LightSteelBlue 90%, SteelBlue 150%);
+		}
+		html{height:100%;width:100%;}
+		body{ font-size:24px; color:var(--color-text); background-image: var(--bg-image);}
+		div.center {width:40%; min-width:400px; position:absolute; top:15%; left:50%; transform: translate(-50%); text-align:center;}
+		div.searchbar {border-radius:1em; padding:0.25em 0.75em 0.25em 0.75em; border: 1px solid var(--color-text); background:var(--color-bg-base); text-align:center;}
+		div.magnifying-glass {font-size: 1.5em;/* This controls the size*/  display:inline-block; width:0.5em; height:0.5em; border: 1px solid var(--color-text); background:var(--color-bg-hover);position:relative; border-radius:0.5em;}
+		div.magnifying-glass::after {content:""; display:inline-block; position:absolute; right:-0.25em; bottom:-0.1em; border-width:0; background:var(--color-text); width:0.35em; height:0.08em; transform:rotate(45deg);}
+		div.magnifying-glass:hover {cursor: pointer;}
+		div.emphasis{font-weight:450;font-size:3em;}
+		input{font-size:1em;border-style:hidden; width:calc(100% - 1em); background:var(--color-bg-base); color:var(--color-text);}
+		input:focus{outline: none;}
+		input::placeholder {color:var(--color-text);font-style:italic;font-size:0.7em;}
+	</style>
+</head>
+<body>
+	<div class="center">
+		<div class="emphasis" id="todayTime">Current time</div>
+		<div id="todayDate">Today's date</div><br>
+		<div class="searchbar">
+			<input type="text" id="askGoogle" placeholder="Search..." autofocus><div class="magnifying-glass" onclick="search();"></div>
+		</div>
+	</div>
+	<script type="text/javascript" charset="utf-8">
+		var userLang = (navigator.language || navigator.userLanguage);
+		var optionsTime = {hour:'numeric', minute:'2-digit'};
+		var optionsDate = {weekday:'long', year:'numeric', month:'long', day:'numeric'};
+		function search(){query = document.getElementById('askGoogle').value; url ='https://www.google.com/search?q=' + query + '&safe=active&num=25'; window.open(url,'_parent'); }
+		function updateToday() {writeToday(); setTimeout("updateToday()",60000);}
+		function initToday() {writeToday(); var now = new Date(); setTimeout("updateToday()",60000-now+60000*Math.floor(now/60000));}
+		function writeToday() {var now = new Date(); document.getElementById("todayDate").innerHTML = now.toLocaleDateString(userLang, optionsDate); document.getElementById("todayTime").innerHTML = now.toLocaleTimeString(userLang, optionsTime); }
+		document.getElementById('askGoogle').addEventListener('keydown', function(e){if(e.keyCode==13){search();}}, false);
+		initToday();
+	</script>
+</body>
+</html>
